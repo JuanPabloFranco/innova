@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ((isset($_SESSION['empresas']['id']) && $_SESSION['empresas']['id'] == 5) || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
+if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
     include_once '../Vista/layouts/header.php';
     include '../Conexion/Conexion.php';
 
@@ -27,13 +27,13 @@ if ((isset($_SESSION['empresas']['id']) && $_SESSION['empresas']['id'] == 5) || 
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap4.min.js"></script>
     <!-- Modal -->
 
-    <script src="../Recursos/js/empresas.js?v=2"></script>
+    <script src="../Recursos/js/empresas.js"></script>
     <input type="hidden" id="id_usuario" value="<?= $_SESSION['datos'][0]->id ?>">
     <input type="hidden" id="txtTipoUsuario" value="<?= $_SESSION['datos'][0]->id_tipo_usuario ?>">
     <input type="hidden" id="txtCargoUsuario" value="<?= $_SESSION['datos'][0]->id_cargo ?>">
-    <input type="hidden" id="txtEditar" value="<?= $_SESSION['empresas']['editar'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2) ? "1" : "0" ?>">
-    <input type="hidden" id="txtVer" value="<?= $_SESSION['empresas']['ver'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2) ? "1" : "0" ?>">
-    <input type="hidden" id="txtPage" value="editar">
+    <input type="hidden" id="txtEditar" value="<?= $_SESSION['equipos']['editar'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2) ? "1" : "0" ?>">
+    <input type="hidden" id="txtVer" value="<?= $_SESSION['equipos']['ver'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2) ? "1" : "0" ?>">
+    <input type="hidden" id="txtPage" value="editar_ind">
 
     <div class='modal fade' id='modalEspera' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
         <div class='modal-dialog'>
@@ -43,7 +43,7 @@ if ((isset($_SESSION['empresas']['id']) && $_SESSION['empresas']['id'] == 5) || 
         </div>
     </div>
     <?php
-    if ($_SESSION['empresas']['crear'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
+    if ($_SESSION['equipos']['crear'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
     ?>
         <div class="modal fade" id="crear_sede" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -94,7 +94,7 @@ if ((isset($_SESSION['empresas']['id']) && $_SESSION['empresas']['id'] == 5) || 
         </div>
     <?php
     }
-    if ($_SESSION['empresas']['editar'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
+    if ($_SESSION['equipos']['editar'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
     ?>
         <div class="modal fade" id="changeLogo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -186,7 +186,6 @@ if ((isset($_SESSION['empresas']['id']) && $_SESSION['empresas']['id'] == 5) || 
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="../Vista/adm_panel.php">Inicio</a></li>
-                            <li class="breadcrumb-item"><a href="../Vista/adm_empresas.php?modulo=empresas"><?= isset($_SESSION['empresas']['nombre']) ? $_SESSION['empresas']['nombre'] : 'Empresas' ?></a></li>
                             <li class="breadcrumb-item active" id="liTitle">Editar Empresa</li>
                         </ol>
                     </div>

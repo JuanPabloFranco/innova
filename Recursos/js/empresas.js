@@ -190,10 +190,17 @@ $(document).ready(function () {
         }
     };
     var dataTable;
-    if(page == 'adm'){
+    if (page == 'adm') {
         buscar();
     }
-    if(page == 'editar'){
+    if (page == 'editar') {
+        const urlParams = new URLSearchParams(window.location.search);
+        var id_empresa = urlParams.get('id');
+        cargarEmpresa();
+        listarSedes();
+    }
+
+    if (page == 'editar_ind') {
         const urlParams = new URLSearchParams(window.location.search);
         var id_empresa = urlParams.get('id');
         cargarEmpresa();
@@ -216,7 +223,7 @@ $(document).ready(function () {
                 title: respuesta[0].mensaje
             })
             if (!respuesta[0].error) {
-                location.href ='../Vista/editar_empresa.php?modulo=empresas&id='+respuesta[0].id;
+                location.href = '../Vista/editar_empresa.php?modulo=empresas&id=' + respuesta[0].id;
             }
         });
 
@@ -266,7 +273,7 @@ $(document).ready(function () {
         });
     }
 
-    function buscar(){
+    function buscar() {
         let funcion = 'listar';
         dataTable = $('#dataTable').DataTable({
             "ajax": {
@@ -304,7 +311,7 @@ $(document).ready(function () {
         });
     });
 
-    
+
     $('#form_editar_empresa').submit(e => {
         var id = id_empresa;
         let nombre = $('#txtNombre').val();
@@ -358,7 +365,42 @@ $(document).ready(function () {
             $('#selMunicipio').val(obj.id_municipio).trigger('change.select2');
             $('#txtEmail').val(obj.email);
             $('#selEstado').val(obj.estado);
+            $('#logoEmpresa').attr('src', '../Recursos/img/empresas/' + obj.logo);
+            $('#logoEmpresa2').attr('src', '../Recursos/img/empresas/' + obj.logo);
         });
     }
+
+    $('#form_logo').submit(e => {
+        let formData = new FormData($('#form_logo')[0]);
+        $(`#modalEspera`).modal(`show`);
+        $('#imgEspera').html('<h2 class=`text-center`>Espere por favor<br><img src=`../Recursos/img/Update.gif` class=`center-all-contens`></h2>');
+        $.ajax({
+            url: '../Controlador/empresasController.php',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false
+        }).done(function (response) {
+            const json = JSON.parse(response);
+            const respuesta = JSON.parse(response);
+            Toast.fire({
+                icon: respuesta[0].type,
+                title: respuesta[0].mensaje
+            })
+            $('#modalEspera').modal('hide');
+            $('#changeLogo').modal('hide'); //ocultamos el modal
+            $('#imgEspera').html('');
+            if (!respuesta[0].error) {
+                $('#logoEmpresa2').attr('src', json.logo);
+                $('#logoEmpresa').attr('src', json.logo);
+                $('body').removeClass('modal-open'); //eliminamos la clase del body para poder hacer scroll
+                $('.modal-backdrop').remove(); //eliminamos el backdrop del modal
+                $('#form_logo').trigger('reset');
+                cargarEmpresa();
+            }
+        });
+        e.preventDefault();
+    });
 
 });

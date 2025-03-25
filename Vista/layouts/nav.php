@@ -289,12 +289,22 @@
                                         </ul>
                                     </li>
                                 <?php
-                                }    
+                                }
+                                if (($_SESSION['datos'][0]->id_tipo_usuario == 3 || $_SESSION['datos'][0]->id_tipo_usuario == 4) && $_SESSION['datos'][0]->nombre_empresa <> "Innova") {
+                                    ?>
+                                    <li class="nav-item">
+                                        <a href="../Vista/editar_empresa_ind.php?modulo=empresas&id=<?=  $_SESSION['datos'][0]->id_empresa?>" class="nav-link <?= $modulo == 'empresas' ? 'active' : '' ?>">
+                                            <i class='nav-icon'><img src='../Recursos/img/empresas/<?=  $_SESSION['datos'][0]->logo_empresa?>' width='30px'></i>                                            
+                                            <p><?=  $_SESSION['datos'][0]->nombre_empresa?></p>
+                                        </a>
+                                    </li>
+                                <?php
+                                }
                                 if (
                                     $_SESSION['datos'][0]->id_tipo_usuario <= 2 || (isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10)
                                 ) {
                                 ?>
-                                    <li class="nav-item has-treeview <?php echo $modulo == 'adm_equipos_empresa' || $modulo=='equipos_gral' || $modulo=='editar_equipo' || $modulo=='reportes_equipos_empresa'  ? 'menu-open' : 'menu-close' ?>">
+                                    <li class="nav-item has-treeview <?php echo $modulo == 'adm_equipos_empresa' || $modulo == 'equipos_gral' || $modulo == 'editar_equipo' || $modulo == 'reportes_equipos_empresa'  ? 'menu-open' : 'menu-close' ?>">
                                         <a href="#" class="nav-link">
                                             <?php
                                             if (isset($_SESSION['equipos']['icono']) && $_SESSION['equipos']['icono'] <> null) {
@@ -313,7 +323,7 @@
                                             if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['ver'] == 1 && $_SESSION['datos'][0]->id_tipo_usuario == 4)) {
                                             ?>
                                                 <li class="nav-item">
-                                                    <a href="../Vista/adm_equipos_empresa.php?modulo=adm_equipos_empresa" class="nav-link <?= $modulo == 'adm_equipos_empresa' || $modulo=='editar_equipo' ? 'active' : '' ?>">
+                                                    <a href="../Vista/adm_equipos_empresa.php?modulo=adm_equipos_empresa" class="nav-link <?= $modulo == 'adm_equipos_empresa' || $modulo == 'editar_equipo' ? 'active' : '' ?>">
                                                         <?php
                                                         if (isset($_SESSION['equipos']['icono']) && $_SESSION['equipos']['icono'] <> null) {
                                                             echo "<i class='nav-icon'><img src='../Recursos/img/empresa/" . $_SESSION['equipos']['icono'] . "' width='25px'></i> ";
@@ -329,7 +339,7 @@
                                             if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['ver'] == 1 && $_SESSION['datos'][0]->id_tipo_usuario == 3) || $_SESSION['datos'][0]->id_tipo_usuario <= 2) {
                                             ?>
                                                 <li class="nav-item">
-                                                    <a href="../Vista/adm_equipos_general.php?modulo=equipos_gral" class="nav-link <?= $modulo == 'equipos_gral' || $modulo=='editar_equipo' ? 'active' : '' ?>">
+                                                    <a href="../Vista/adm_equipos_general.php?modulo=equipos_gral" class="nav-link <?= $modulo == 'equipos_gral' || $modulo == 'editar_equipo' ? 'active' : '' ?>">
                                                         <?php
                                                         if (isset($_SESSION['equipos']['icono']) && $_SESSION['equipos']['icono'] <> null) {
                                                             echo "<i class='nav-icon'><img src='../Recursos/img/empresa/" . $_SESSION['equipos']['icono'] . "' width='25px'></i> ";
@@ -346,7 +356,7 @@
                                         </ul>
                                     </li>
                                 <?php
-                                }    
+                                }
                                 ?>
                                 <!-- <li class="nav-item">
                                     <a href="../Vista/calendario.php?modulo=calendario" class="nav-link <?= $modulo == 'calendario' ? 'active' : '' ?>">
@@ -393,7 +403,7 @@
                                     </li>
                                 <?php
                                 }
-                                                            
+                                
                                 if (
                                     $_SESSION['datos'][0]->id_tipo_usuario <= 2 || (isset($_SESSION['agenda']['id']) && $_SESSION['agenda']['id'] == 8)
                                 ) {
@@ -439,9 +449,9 @@
                                         </ul>
                                     </li>
                                 <?php
-                                }
-                                
-                                echo '<li class="nav-header">Otros módulos</li>';                               
+                                }                                
+
+                                echo '<li class="nav-header">Otros módulos</li>';
                                 if (
                                     $_SESSION['datos'][0]->id_tipo_usuario <= 2 || (isset($_SESSION['notas de inicio']['id']) && $_SESSION['notas de inicio']['id'] == 7)
                                 ) {
@@ -463,7 +473,7 @@
                                 if (
                                     $_SESSION['datos'][0]->id_tipo_usuario <= 2 || (isset($_SESSION['biblioteca']['id']) && $_SESSION['biblioteca']['id'] == 9)
                                 ) {
-                                    if ((isset($_SESSION['biblioteca']['id']) && $_SESSION['biblioteca']['editar'] == 1 ) || $_SESSION['datos'][0]->id_tipo_usuario <= 2) {
+                                    if ((isset($_SESSION['biblioteca']['id']) && $_SESSION['biblioteca']['editar'] == 1) || $_SESSION['datos'][0]->id_tipo_usuario <= 2) {
                                     ?>
                                         <li class="nav-item">
                                             <a href="../Vista/adm_biblioteca.php?modulo=adm_biblioteca" class="nav-link <?= $modulo == 'adm_biblioteca' ? 'active' : '' ?>">
@@ -479,7 +489,7 @@
                                         </li>
                                     <?php
                                     }
-                                    if ((isset($_SESSION['biblioteca']['id']) && $_SESSION['biblioteca']['ver'] == 1 )|| $_SESSION['datos'][0]->id_tipo_usuario <= 2) {
+                                    if ((isset($_SESSION['biblioteca']['id']) && $_SESSION['biblioteca']['ver'] == 1) || $_SESSION['datos'][0]->id_tipo_usuario <= 2) {
                                     ?>
                                         <li class="nav-item">
                                             <a href="../Vista/biblioteca.php?modulo=biblioteca" class="nav-link <?= $modulo == 'biblioteca' ? 'active' : '' ?>">
@@ -487,9 +497,9 @@
                                                 <p><?= isset($_SESSION['biblioteca']['nombre']) ? $_SESSION['biblioteca']['nombre'] : "Biblioteca" ?></p>
                                             </a>
                                         </li>
-                                <?php
+                                    <?php
                                     }
-                                }
+                                }                                
                                 ?>
                                 <!-- <li class="nav-header">Otros</li> -->
 

@@ -25,7 +25,7 @@ class UsuarioDAO
 
      function loguearse(Usuario $obj)
      {
-          $sql = "SELECT U.id, U.nombre_completo, T.nombre_tipo, U.id_tipo_usuario, U.id_cargo, U.usuario_login, U.estado, C.nombre_cargo, T.estado AS estado_tipo_usuario, C.estado AS estado_cargo, U.id_empresa FROM usuarios U JOIN tipo_usuarios T ON U.id_tipo_usuario=T.id LEFT JOIN cargos C ON U.id_cargo=C.id  WHERE U.usuario_login=:usuario AND U.pass_login=:pass";
+          $sql = "SELECT U.id, U.nombre_completo, T.nombre_tipo, U.id_tipo_usuario, U.id_cargo, U.usuario_login, U.estado, C.nombre_cargo, T.estado AS estado_tipo_usuario, C.estado AS estado_cargo FROM usuarios U JOIN tipo_usuarios T ON U.id_tipo_usuario=T.id LEFT JOIN cargos C ON U.id_cargo=C.id JOIN empresas E ON U.id_empresa=E.id WHERE U.usuario_login=:usuario AND U.pass_login=:pass";
           $query = $this->acceso->prepare($sql);
           $query->execute(array(':usuario' => $obj->getUsuarioLogin(), ':pass' => $obj->getPassLogin()));
           $this->objetos = $query->fetchall();
@@ -34,7 +34,7 @@ class UsuarioDAO
 
      function datos($id)
      {
-          $sql = "SELECT U.id, U.estado, U.id_tipo_usuario, U.nombre_completo, U.genero, U.avatar, C.nombre_cargo, TU.nombre_tipo, C.id AS id_cargo, U.menu, C.historias, C.soporte, E.nombre AS nombre_empresa, U.id_empresa FROM usuarios U LEFT JOIN cargos C ON U.id_cargo=C.id JOIN tipo_usuarios TU ON U.id_tipo_usuario=TU.id LEFT JOIN empresas E ON U.id_empresa=E.id WHERE U.id=:id";
+          $sql = "SELECT U.id, U.estado, U.id_tipo_usuario, U.nombre_completo, U.genero, U.avatar, C.nombre_cargo, TU.nombre_tipo, C.id AS id_cargo, U.menu, C.historias, C.soporte, E.nombre AS nombre_empresa, U.id_empresa, E.logo AS logo_empresa FROM usuarios U LEFT JOIN cargos C ON U.id_cargo=C.id JOIN tipo_usuarios TU ON U.id_tipo_usuario=TU.id LEFT JOIN empresas E ON U.id_empresa=E.id WHERE U.id=:id";
           $query = $this->acceso->prepare($sql);
           $query->execute(array(':id' => $id));
           $this->objetos = $query->fetchall();

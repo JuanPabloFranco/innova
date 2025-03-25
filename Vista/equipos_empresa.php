@@ -1,14 +1,14 @@
 <?php
 session_start();
-include '../Conexion/Conexion.php';
 if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
     include_once '../Vista/layouts/header.php';
+    include_once '../Conexion/Conexion.php';
 ?>
-    <title>Gestión <?= isset($_SESSION['equipos']['nombre']) ? $_SESSION['equipos']['nombre'] : 'equipos' ?></title>
+    <title id="titleEmpresa"></title>
     <?php
     include_once '../Vista/layouts/nav.php';
     ?>
-
+    <!-- Modal -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.bootstrap4.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.bootstrap4.min.css" />
@@ -24,10 +24,16 @@ if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.7/js/responsive.bootstrap4.min.js"></script>
-    <!-- Modal -->
-    <script src="../Recursos/js/equipos.js?v=2"></script>
-    <input type="hidden" id="txtPage" value="adm_empresas">
-    <input type="hidden" id="txtIdEmpresa" value="<?= $_SESSION['datos'][0]->id_empresa ?>">
+    <script src="../Recursos/js/equipos.js"></script>
+    <input type="hidden" id="txtPage" value="equiposEmpresa">
+
+    <div class='modal fade' id='modalEspera' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div id='imgEspera'></div>
+            </div>
+        </div>
+    </div>
 
     <?php
     if ($_SESSION['equipos']['crear'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
@@ -61,7 +67,7 @@ if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (
                                     <option value="">Seleccione</option>
                                     <?php
                                     $sqlSedes = "SELECT S.id, S.nombre_sede, M.nombre FROM sedes_empresa S JOIN municipios M ON S.id_municipio=M.id WHERE S.id_empresa=" . $_SESSION['datos'][0]->id_empresa;
-                                    
+
                                     $resSedes = ejecutarSQL::consultar($sqlSedes);
                                     while ($sedes = mysqli_fetch_array($resSedes)) {
                                         echo '<option value="' . $sedes['id'] . '">' . $sedes['nombre_sede'] . '  (' . $sedes['nombre'] . ')</option>';
@@ -81,60 +87,87 @@ if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (
     <?php
     }
     ?>
-
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Gestión <?= isset($_SESSION['equipos']['nombre']) ? $_SESSION['equipos']['nombre'] : 'Equipos' ?>
-                            <?php
-                            if ($_SESSION['equipos']['crear'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
-                            ?>
-                                <button type="button" id="btnCrearEquipo" data-bs-toggle="modal" data-bs-target="#crear_equipo" class="btn bg-gradient-primary m-2">Crear Equipo</button>
-                            <?php
-                            }
-                            ?>
+                    <div class="col-sm-6" style="display: flex;">
+                        <h1 id="h5NombreEmpresa">
                         </h1>
+                        <?php
+                        if ($_SESSION['equipos']['crear'] || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
+                        ?>
+                            <button type="button" id="btnCrearEquipo" data-bs-toggle="modal" data-bs-target="#crear_equipo" class="btn bg-gradient-primary m-2">Crear Equipo</button>
+                        <?php
+                        }
+                        ?>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="../Vista/adm_panel.php">Inicio</a></li>
-                            <li class="breadcrumb-item active">Gestión <?= isset($_SESSION['equipos']['nombre']) ? $_SESSION['equipos']['nombre'] : 'Equipos' ?></li>
+                            <li class="breadcrumb-item"><a href="../Vista/adm_equipos_general.php?modulo=equipos_gral">Gestión Equipos</a></li>
+                            <li class="breadcrumb-item active" id="liNombreEmpresa"></li>
                         </ol>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
         </section>
         <section>
-            <div class="container-fluid">
-                <div class="card card-success">
-                    <div class="modal-header notiHeader">
-                        
-                    </div>
-                    <div class="card-body pb-0 table-responsive">
-                        <table id="dataTable" class="display" style="width:100%" class="table table-hover text-nowrap">
-                            <thead class="notiHeader">
-                                <tr>
-                                    <th>Estado</th>
-                                    <th>#</th>
-                                    <th>Estado</th>
-                                    <th>Tipo</th>
-                                    <th>Ubicación</th>
-                                    <th>Sede</th>
-                                    <th>Referencia</th>
-                                    <th>Estado Equipo</th>
-                                    <th>Persona a Cargo</th>
-                                    <th>Editar</th>
-                                    <th>HV PDF</th>
-                                </tr>
-                            </thead>
-                            <tbody style="font-family: Sans-serif; font-size: 13px;"></tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card card_personalizada card-outline">
+                                <div class="card-body box-profile">
+                                    <div class="text-center">
+                                        <img id="logoEmpresa" class="profile-user-img img-fluid img-circle">
+                                    </div>
+                                    <h3 class="profile-username text-center" id="h3NombreEmpresa"></h3>
+                                    <ul class="list-group list-group-unbordered mb-3">
+                                        <li class="list-group-item"><b>Teléfono</b><a class="float-right" id="telefono"></a></li>
+                                        <li class="list-group-item"><b>Dirección</b><a class="float-right" id="direccion"></a></li>
+                                        <li class="list-group-item"><b>Email</b><a class="float-right" id="email"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card card_personalizada card-outline">
+                                <div class="card-header notiHeader p-0 pt-1 text-center">
+                                    <h3 class="card-title"> Datos Generales</h3>
+                                </div>
+                                <div class="card-body" id="divSedes">
+                                    
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card card_personalizada">
+                                <div class="card-header p-0 pt-1">
+
+                                </div><!-- /.card-header -->
+                                <div class="card-body pb-0 table-responsive">
+                                    <table id="dataTable" class="display" style="width:100%" class="table table-hover text-nowrap">
+                                        <thead class="notiHeader">
+                                            <tr>
+                                                <th>Estado</th>
+                                                <th>#</th>
+                                                <th>Estado</th>
+                                                <th>Tipo</th>
+                                                <th>Ubicación</th>
+                                                <th>Sede</th>
+                                                <th>Referencia</th>
+                                                <th>Estado Equipo</th>
+                                                <th>Persona a Cargo</th>
+                                                <th>Editar</th>
+                                                <th>HV PDF</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-family: Sans-serif; font-size: 13px;"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -144,6 +177,6 @@ if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (
 <?php
     include_once '../Vista/layouts/footer.php';
 } else {
-    header('Location: ../Vista/adm_panel.php');
+    header('Location: ../index.php');
 }
 ?>

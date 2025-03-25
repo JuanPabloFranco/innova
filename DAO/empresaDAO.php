@@ -44,6 +44,39 @@ class empresaDAO
     }
 
     /**
+     * La función "buscar" recupera datos de una tabla de base de datos llamada "empresas" en base
+     * a una consulta de búsqueda y devuelve los resultados.
+     * 
+     * @return una serie de objetos.
+     */
+    function listar_activas($limite, $id_empresa)
+    {
+        $andWhere = "";
+        if($limite){
+            $andWhere = ' AND E.id='.$id_empresa;
+        }
+        $sql = "SELECT 
+                    E.id, E.estado AS estado_valor, E.nombre, CONCAT(E.direccion,' ',M.nombre,' (',D.nombre,')') AS direccion, E.telefono, E.email, E.id_municipio, 
+                    IF(E.estado=1, '<h1 class=\'badge badge-primary ml-1\'>Activo</h1>',
+                        '<h1 class=\'badge badge-dark ml-1\'>Inactivo</h1>'
+                    ) AS estado,
+                    IF((1=1),
+                        CONCAT('<a href=\'../Vista/equipos_empresa.php?modulo=equipos_empresa&id=', E.id, '\'><button class=\'btn btn-sm btn-primary mr-1\' type=\'button\' title=\'Equipos Empresa\'><i class=\'fas fa-desktop\'></i></button></a>'),
+                        ''
+                    ) AS boton,
+                    E.logo
+                FROM 
+                    empresas E JOIN municipios M ON E.id_municipio = M.id JOIN departamentos D ON M.departamento_id=D.id
+                WHERE E.estado=1  $andWhere
+                ORDER BY 
+                    E.estado ASC;";
+        $query = $this->acceso->prepare($sql);
+        $query->execute();
+        $this->objetos = $query->fetchall();
+        return $this->objetos;
+    }
+
+    /**
      * La función "cargar" recupera un objeto de carga de la base de datos en función de su ID.
      * 
      * @param Empresa obj El parámetro "obj" es una instancia de la clase "empresas".
@@ -107,6 +140,22 @@ class empresaDAO
         $sql = "UPDATE empresas SET estado=:estado WHERE id=:id";
         $query = $this->acceso->prepare($sql);
         if ($query->execute(array(':id' => $obj->getId(), ':estado' => $obj->getEstado()))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * La función "cambiar_estado" actualiza el estado de un objeto Sede en la base de datos.
+     * 
+     * @param Sede obj El parámetro "obj" es un objeto de la clase "Sede".
+     */
+    function cambiar_logo(Empresa $obj)
+    {
+        $sql = "UPDATE empresas SET logo=:logo WHERE id=:id";
+        $query = $this->acceso->prepare($sql);
+        if ($query->execute(array(':id' => $obj->getId(), ':logo' => $obj->getLogo()))) {
             return true;
         } else {
             return false;

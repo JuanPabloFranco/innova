@@ -3,12 +3,12 @@ session_start();
 if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (isset($_SESSION['datos']) && $_SESSION['datos'][0]->id_tipo_usuario <= 2)) {
     include_once '../Vista/layouts/header.php'
 ?>
-    <title><?= $_SESSION['equipos']['nombre']?></title>
+    <title><?= $_SESSION['equipos']['nombre']?> de empresas</title>
     <?php
     include_once '../Vista/layouts/nav.php';
     ?>
     <!-- Modal -->
-    <script src="../Recursos/js/equipos.js"></script>
+    <script src="../Recursos/js/equipos.js?v=1"></script>
     <input type="hidden" id="txtPage" value="general">
 
     
@@ -19,7 +19,7 @@ if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (
             <div class="container-fluid">
                 <div class="row mb-">
                     <div class="col-sm-6">
-                        <h1>Gestión <?= isset($_SESSION['equipos']['nombre']) ? $_SESSION['equipos']['nombre'] : 'Equipos' ?>
+                        <h1>Gestión <?= isset($_SESSION['equipos']['nombre']) ? $_SESSION['equipos']['nombre'] : 'Equipos' ?> de empresas
                             <?php
                             if ($_SESSION['datos'][0]->id_tipo_usuario == 1) {
                             ?>
@@ -32,7 +32,7 @@ if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (
                     <div class="col-sm-6 ">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="../Vista/adm_panel.php">Inicio</a></li>
-                            <li class="breadcrumb-item active">Gestión <?= isset($_SESSION['equipos']['nombre']) ? $_SESSION['equipos']['nombre'] : 'Equipos' ?></li>
+                            <li class="breadcrumb-item active">Gestión <?= isset($_SESSION['equipos']['nombre']) ? $_SESSION['equipos']['nombre'] : 'Equipos' ?> de empresas</li>
                         </ol>
                     </div>
                 </div>
@@ -45,7 +45,7 @@ if ((isset($_SESSION['equipos']['id']) && $_SESSION['equipos']['id'] == 10) || (
                     <div class="modal-header notiHeader">
                         <h3 class="card-title">Buscar Empresa</h3>
                         <div class="input-group">
-                            <input type="text" id="TxtBuscar" placeholder="Ingrese el nombre del módulo" class="form-control float-left">
+                            <input type="text" id="TxtBuscar" placeholder="Ingrese el nombre de la empresa" class="form-control float-left">
                             <div class="input-group-append">
                                 <button class="btn btn-default"><i class="fas fa-search"></i></button>
                             </div>

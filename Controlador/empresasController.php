@@ -145,7 +145,11 @@ la cual se retorna
 if (isset($_POST['funcion']) && $_POST['funcion'] == 'listar_sedes') {
     $json = array();
     $sedes->setIdEmpresa($_POST['id_empresa']);
-    $dao->listar_sedes($_SESSION['empresas']['editar'], $_SESSION['empresas']['ver'], $sedes);
+    if (isset($_SESSION['empresas'])) {
+        $dao->listar_sedes($_SESSION['empresas']['editar'], $_SESSION['empresas']['ver'], $sedes);
+    } else {
+        $dao->listar_sedes(1, 1, $sedes);
+    }
     foreach ($dao->objetos as $objeto) {
         $json['data'][] = $objeto;
     }
@@ -233,6 +237,81 @@ if ($_POST['funcion'] == 'editar_sede') {
         $mensaje = "Error al actualizar la empresa";
         $error = true;
     }
+    $respuesta[] = array(
+        'error' => $error,
+        'type' => $type,
+        'mensaje' => $mensaje
+    );
+    $jsonstring = json_encode($respuesta);
+    echo $jsonstring;
+}
+
+/* Este bloque de código verifica si el valor de la variable `['funcion']` es igual a `'buscar'`.
+Si es así, realiza las siguientes acciones: 
+Recorre el resultado de la consulta a la base de datos y los agrega a una lista en formato JSON
+la cual se retorna
+*/
+if (isset($_POST['funcion']) && $_POST['funcion'] == 'listar_tecnicos') {
+    $json = array();
+    $fecha_actual = new DateTime();
+    $limite = 0;
+    if($_SESSION['datos'][0]->nombre_empresa<>"Innova"){
+        $limite = 0;
+    }
+    // trae los datos de los usuarios desde la base de datos en la base de datos, se envia el cargo en caso de que sea 4 este solo traiga los usuarios activos
+    $dao->listar_activas($limite, $_SESSION['datos'][0]->id_empresa);
+    foreach ($dao->objetos as $objeto) {
+        $json[] = array(
+            'id' => $objeto->id,
+            'estado_valor' => $objeto->estado_valor,
+            'estado' => $objeto->estado,
+            'nombre' => $objeto->nombre,
+            'direccion' => $objeto->direccion,
+            'telefono' => $objeto->telefono,
+            'email' => $objeto->email,
+            'id_municipio' => $objeto->id_municipio,
+            'boton' => $objeto->boton,
+            'logo' => $objeto->logo,
+        );
+    }
+    $jsonstring = json_encode($json);
+    echo $jsonstring;
+}
+
+if ($_POST['funcion'] == 'changeLogo') {
+    $error = false;
+    $type = "";
+    $mensaje = "";
+
+    $empresa->setId($_POST['id_empresa']);
+    if (($_FILES['logo']['type'] == 'image/jpeg') || ($_FILES['logo']['type'] == 'image/png') || ($_FILES['logo']['type'] == 'image/gif')) {
+        $logo = uniqid() . "-" . $_FILES['logo']['name'];
+        $ruta = '../Recursos/img/empresas/' . $logo;
+        if(move_uploaded_file($_FILES['logo']['tmp_name'], $ruta)){
+            //Obtener logo anterior
+            $empresa->setLogo($logo);
+            $dao->cargar($empresa);
+            $logoOld = $dao->objetos[0]->logo;
+            if ($dao->cambiar_logo($empresa)) {
+                if ($logoOld <> 'logo_default.png') {
+                    unlink('../Recursos/img/empresas/' . $logoOld);
+                }
+            }else {
+                $type = "error";
+                $mensaje = "Error al guardar el logo en el base de datos";
+                $error = true;
+            }
+        }else {
+            $type = "error";
+            $mensaje = "Error al guardar el logo en el servidor";
+            $error = true;
+        }
+    } else {
+        $type = "info";
+        $mensaje = "Formato de imagén no válido";
+        $error = true;
+    }
+
     $respuesta[] = array(
         'error' => $error,
         'type' => $type,

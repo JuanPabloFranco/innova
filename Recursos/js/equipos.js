@@ -192,9 +192,15 @@ $(document).ready(function () {
     if (page == 'adm_empresas') {
         listarEquiposEmpresa(id_empresa);
     }
+    if (page == 'equiposEmpresa') {      
+        const urlParams = new URLSearchParams(window.location.search);
+        var id_empresa = urlParams.get('id');
+        listarEquiposEmpresa(id_empresa);
+        cargarEmpresa(id_empresa);
+    }
 
-    if (page == 'adm') {
-        buscar();
+    if (page == 'general') {
+        listarEmpresas();
     }
     if (page == 'editar') {
         const urlParams = new URLSearchParams(window.location.search);
@@ -454,9 +460,90 @@ $(document).ready(function () {
         cargarValorRange($('#rangeEstado').val());
     });
 
-    function cargarValorRange(valor){
-        $('#pEstadoGeneralLabel').html(' '+valor);
+    function cargarValorRange(valor) {
+        $('#pEstadoGeneralLabel').html(' ' + valor);
     }
 
+    function listarEmpresas(consulta) {
+        var hoy = new Date();
+        var funcion = "listar_tecnicos";
+
+        $.post('../Controlador/empresasController.php', { consulta, funcion }, (response) => {
+            const objetos = JSON.parse(response);
+            let template = "";
+            objetos.forEach(objeto => {
+                template += `
+                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                    <div class="card bg-light">
+                        <div class="card-header text-muted border-bottom-0"></div>
+                        <div class="card-body pt-0">
+                            <div class="row">
+                                <div class="col-8">
+                                    <h2 class="lead"><b>${objeto.nombre}</b></h2>
+                                    <ul class="ml-4 mb-0 fa-ul text-muted">
+                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Dirección: ${objeto.direccion != null && objeto.direccion != "" ? objeto.direccion : "N/A"}</li>
+                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Teléfono: ${objeto.telefono != null && objeto.telefono != "" ? objeto.telefono : "N/A"}</li>
+                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-at"></i></span> Email: ${objeto.email != null && objeto.email != "" ? objeto.email : "N/A"}</li>
+                                    </ul>`;
+                // if (objeto.telefono !== null && objeto.telefono != '' && objeto.telefono != undefined) {
+                //     template += `<a href="https://api.whatsapp.com/send?phone=+57${objeto.telefono}&amp;text=Hola, quiero contactar contigo" target="_blank">
+                //                     <img src="../Recursos/img/whatsapp_icon.png" alt="" width="30px">
+                //                 </a>`;
+                // }
+                // if (objeto.facebook !== null && objeto.facebook != '' && objeto.facebook != undefined) {
+                //     template += `<a href="${objeto.facebook}" target="_blank">
+                //                     <img src="../Recursos/img/facebook_icon.png" alt="" width="30px">
+                //                 </a>`;
+                // }
+                // if (objeto.instagram !== null && objeto.instagram != '' && objeto.instagram != undefined) {
+                //     template += `<a href="${objeto.instagram}" target="_blank">
+                //                     <img src="../Recursos/img/instagram_icon.png" alt="" width="30px">
+                //                 </a>`;
+                // }
+                // if (objeto.tiktok !== null && objeto.tiktok != '' && objeto.tiktok != undefined) {
+                //     template += `<a href="${objeto.tiktok}" target="_blank">
+                //                     <img src="../Recursos/img/tiktok_icon.png" alt="" width="30px">
+                //                 </a>`;
+                // }
+                // if (objeto.youtube !== null && objeto.youtube != '' && objeto.youtube != undefined) {
+                //     template += `<a href="${objeto.youtube}" target="_blank">
+                //                     <img src="../Recursos/img/youtube_icon.png" alt="" width="30px">
+                //                 </a>`;
+                // }
+
+                template += `   </div>
+                                <div class="col-4 text-center">
+                                    <img src="../Recursos/img/empresas/${objeto.logo}" alt="" class="img-circle img-fluid" style='width: 80%'>
+                                </div>`;
+
+                template += `</div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="text-right" >`;
+                template += `${objeto.boton}`;
+                template += `
+                        </div>
+                    </div>
+                    </div>
+                </div>`;
+            });
+            $('#busqueda').html(template);
+        });
+    }
+
+    function cargarEmpresa(id) {
+        funcion = 'cargar';
+        $.post('../Controlador/empresasController.php', { id, funcion }, (response) => {
+            const obj = JSON.parse(response);
+            $('#titleEmpresa').html(obj.nombre);
+            $('#h5NombreEmpresa').html(obj.nombre);
+            $('#liNombreEmpresa').html(obj.nombre);
+            $('#h3NombreEmpresa').html(obj.nombre);
+            $('#telefono').html(obj.telefono);
+            $('#direccion').html(obj.direccion);
+            $('#email').html(obj.email);
+            $('#logoEmpresa').attr('src','../Recursos/img/empresas/'+obj.logo);
+        });
+    }
 
 });
