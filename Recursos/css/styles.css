@@ -1,0 +1,173 @@
+
+.imgAvatar {
+    width: 20%;
+    border: none;
+    background-color: white;
+    padding: 0%;
+    margin-right: 5px;
+}
+
+.imgAvatarAsesor {
+    width: 20%;
+    border: none;
+    background-color: white;
+    padding: 0%;
+    margin-right: 5px;
+}
+
+.fotoProyecto {
+    width: 90%;
+    border: none;
+    background-color: white;
+    padding: 0%;
+    margin-right: 5px;
+}
+
+.imgAvatar :hover {
+    border: none;
+}
+
+.imgAvatar :active {
+    border: none;
+}
+
+.imgAvatarAsesor :hover {
+    border: none;
+}
+
+.imgAvatarAsesor :active {
+    border: none;
+}
+
+.text_panel {
+    color: #00061f;
+}
+
+.cardEvent {
+    padding: 40px 20px;
+    background: #fff;
+    text-align: center;
+    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.08);
+    border-radius: 4px;
+    color: #00061f;
+    position: relative;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.cardEvent :hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+}
+
+.notiHeader {
+    background-color: #00061f;
+    color: white;
+}
+
+.centrado {
+    margin: 2px auto;
+    display: block;
+}
+
+.flotante {
+    display: scroll;
+    position: fixed;
+    bottom: 90px;
+    left: 0px;
+}
+
+.cardPub {
+    border-radius: 16px;
+    background-color: azure;
+    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+}
+
+.divHistorias {
+    text-align: center;
+    justify-content: center;
+}
+
+.flotante:hover {
+    transform: translateY(-7px);
+}
+
+.card_personalizada:not(.card-outline)>.card-header {
+    background-color: #00061f;
+}
+
+.card_personalizada:not(.card-outline)>.card-header,
+.card_personalizada:not(.card-outline)>.card-header a {
+    color: #ffffff;
+}
+
+.card_personalizada:not(.card-outline)>.card-header a.active {
+    color: #1F2D3D;
+}
+
+.card_personalizada.card-outline {
+    border-top: 3px solid #00061f;
+}
+
+.card_personalizada.card-outline-tabs>.card-header a:hover {
+    border-top: 3px solid #dee2e6;
+}
+
+.card_personalizada.card-outline-tabs>.card-header a.active {
+    border-top: 3px solid #00061f;
+}
+
+.bg-dagda .btn-tool,
+.bg-gradient-dagda .btn-tool,
+.card_personalizada:not(.card-outline) .btn-tool {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.bg-dagda .btn-tool:hover,
+.bg-gradient-dagda .btn-tool:hover,
+.card_personalizada:not(.card-outline) .btn-tool:hover {
+    color: #ffffff;
+}
+
+.card.bg-dagda .bootstrap-datetimepicker-widget .table td,
+.card.bg-dagda .bootstrap-datetimepicker-widget .table th,
+.card.bg-gradient-dagda .bootstrap-datetimepicker-widget .table td,
+.card.bg-gradient-dagda .bootstrap-datetimepicker-widget .table th {
+    border: none;
+}
+
+.card.bg-dagda .bootstrap-datetimepicker-widget table thead tr:first-child th:hover,
+.card.bg-dagda .bootstrap-datetimepicker-widget table td.day:hover,
+.card.bg-dagda .bootstrap-datetimepicker-widget table td.hour:hover,
+.card.bg-dagda .bootstrap-datetimepicker-widget table td.minute:hover,
+.card.bg-dagda .bootstrap-datetimepicker-widget table td.second:hover,
+.card.bg-gradient-dagda .bootstrap-datetimepicker-widget table thead tr:first-child th:hover,
+.card.bg-gradient-dagda .bootstrap-datetimepicker-widget table td.day:hover,
+.card.bg-gradient-dagda .bootstrap-datetimepicker-widget table td.hour:hover,
+.card.bg-gradient-dagda .bootstrap-datetimepicker-widget table td.minute:hover,
+.card.bg-gradient-dagda .bootstrap-datetimepicker-widget table td.second:hover {
+    background: #208637;
+    color: #ffffff;
+}
+
+.card.bg-dagda .bootstrap-datetimepicker-widget table td.today::before,
+.card.bg-gradient-green .bootstrap-datetimepicker-widget table td.today::before {
+    border-bottom-color: #ffffff;
+}
+
+.card.bg-dagda .bootstrap-datetimepicker-widget table td.active,
+.card.bg-dagda .bootstrap-datetimepicker-widget table td.active:hover,
+.card.bg-gradient-dagda .bootstrap-datetimepicker-widget table td.active,
+.card.bg-gradient-dagda .bootstrap-datetimepicker-widget table td.active:hover {
+    background: #34ce57;
+    color: #ffffff;
+}
+
+#pac-input {
+    position: relative;
+    z-index: 1050; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+#contenedorBuscador {
+    z-index: 1050; /* Asegúrate de que el contenedor del autocompletado esté visible */
+}

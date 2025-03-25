@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	margin:0;
+	padding:0;
+	background-size:100%;
+	background-repeat: no-repeat;
+	background-color: #000;
+}
+
+
+.content-wrapper{
+	background-color: transparent !important;
+}
+
+.clear {
+	 clear:both;	
+}
+
+ol li a{
+	color: #fff !important;
+}
+ol li{
+	color: #ffc311 !important;
+	font-weight: 800;
+	text-shadow: 10px 10px 10px #fff;
+}
+
+h1{
+	text-shadow: 10px 10px 10px #fff;
+	color: #fff;
+}
